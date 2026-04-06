@@ -1,0 +1,47 @@
+<div class="bg-surface rounded-lg shadow-lg border border-gray-800 p-6 flex flex-col gap-4">
+  <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+    <h3 class="text-lg font-bold text-white">Valid Questions</h3>
+    <span class="text-sm text-success font-mono bg-green-900/40 px-3 py-1 rounded-full">Showing {{questions.length}} valid questions</span>
+  </div>
+
+  <div class="overflow-x-auto overflow-y-auto max-h-[400px] border border-gray-800 rounded">
+    <table class="w-full text-left text-sm whitespace-nowrap">
+      <thead class="sticky top-0 bg-[#1e222d] text-textMuted uppercase text-xs z-10 shadow-sm border-b border-gray-800">
+        <tr>
+          <th class="py-3 px-4 w-12 text-center">#</th>
+          <th class="py-3 px-4 w-1/4">Question</th>
+          <th class="py-3 px-4">Difficulty</th>
+          <th class="py-3 px-4">Module</th>
+          <th class="py-3 px-4">Option 1</th>
+          <th class="py-3 px-4">Option 2</th>
+          <th class="py-3 px-4">Option 3</th>
+          <th class="py-3 px-4">Option 4</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-800">
+        <tr *ngFor="let q of questions; let i = index" class="hover:bg-gray-800/40 transition-colors">
+          <td class="py-3 px-4 text-center font-mono text-textMuted">{{i + 1}}</td>
+          <td class="py-3 px-4 text-textPrimary max-w-[200px] truncate" [matTooltip]="q.text">{{q.text}}</td>
+          <td class="py-3 px-4 text-textMuted">{{q.difficulty}}</td>
+          <td class="py-3 px-4 text-textMuted">{{q.module}}</td>
+          <td class="py-3 px-4" [ngClass]="{'text-success font-bold bg-green-900/10': q.option1_is_correct, 'text-textMuted': !q.option1_is_correct}">
+            <span class="max-w-[100px] inline-block truncate align-bottom" [matTooltip]="q.option1_text">{{q.option1_text}}</span>
+            <span *ngIf="q.option1_is_correct" class="ml-1 text-xs">✓</span>
+          </td>
+          <td class="py-3 px-4" [ngClass]="{'text-success font-bold bg-green-900/10': q.option2_is_correct, 'text-textMuted': !q.option2_is_correct}">
+            <span class="max-w-[100px] inline-block truncate align-bottom" [matTooltip]="q.option2_text">{{q.option2_text}}</span>
+            <span *ngIf="q.option2_is_correct" class="ml-1 text-xs">✓</span>
+          </td>
+          <td class="py-3 px-4" [ngClass]="{'text-success font-bold bg-green-900/10': q.option3_is_correct, 'text-textMuted': !q.option3_is_correct}">
+            <span class="max-w-[100px] inline-block truncate align-bottom" [matTooltip]="q.option3_text">{{q.option3_text}}</span>
+            <span *ngIf="q.option3_is_correct" class="ml-1 text-xs">✓</span>
+          </td>
+          <td class="py-3 px-4" [ngClass]="{'text-success font-bold bg-green-900/10': q.option4_is_correct, 'text-textMuted': !q.option4_is_correct}">
+            <span class="max-w-[100px] inline-block truncate align-bottom" [matTooltip]="q.option4_text">{{q.option4_text}}</span>
+            <span *ngIf="q.option4_is_correct" class="ml-1 text-xs">✓</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

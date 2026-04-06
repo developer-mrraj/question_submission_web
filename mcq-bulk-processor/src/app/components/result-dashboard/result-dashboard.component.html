@@ -1,0 +1,18 @@
+<div class="animate-fade-in-up mt-8 flex flex-col gap-6">
+  
+  <!-- Panel A: Summary Cards -->
+  <app-summary-cards [summary]="response.summary"></app-summary-cards>
+
+  <!-- Panel C: Errors Panel (Display above table to draw attention) -->
+  <app-error-panel 
+    *ngIf="response.errors.length > 0"
+    [errors]="response.errors">
+  </app-error-panel>
+
+  <!-- Panel B: Valid Questions Table -->
+  <app-valid-questions-table 
+    *ngIf="response.validQuestions.length > 0"
+    [questions]="response.validQuestions">
+  </app-valid-questions-table>
+
+</div>

@@ -1,0 +1,63 @@
+<form [formGroup]="inputForm" (ngSubmit)="onSubmit()" class="bg-surface rounded-lg shadow-lg border border-gray-800 p-6 flex flex-col gap-6">
+  
+  <div class="flex flex-col w-full h-full relative">
+    <label class="text-textPrimary font-semibold text-sm mb-2 font-sans tracking-wide">Paste Raw Questions Here *</label>
+    <textarea 
+      formControlName="rawText"
+      class="w-full bg-[#0b0c10] text-[#e2e8f0] border border-gray-700 rounded p-4 font-mono text-[13px] leading-6 resize-y focus:outline-none focus:border-primary transition-colors min-h-[300px]"
+      placeholder="Q1. What is 2+2?\nA) 1\nB) 2\nC) 4\nD) 5\nAnswer: C\n\nQ2. ..."></textarea>
+    
+    <div class="flex justify-between items-center mt-1 px-1">
+      <span class="text-xs text-error" *ngIf="rawTextControl?.invalid && rawTextControl?.touched">
+        Minimum 10 characters required.
+      </span>
+      <span class="text-xs text-textMuted ml-auto font-mono">
+        {{ charCount | number }} / ~40,000
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+    <mat-form-field appearance="outline" color="primary" class="w-full">
+      <mat-label>Class Level</mat-label>
+      <mat-select formControlName="classLevel">
+        <mat-option *ngFor="let c of classes" [value]="c">{{c}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="inputForm.get('classLevel')?.invalid">Class is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary" class="w-full">
+      <mat-label>Module / Subject</mat-label>
+      <input matInput formControlName="subject" placeholder="e.g. Practice Test, NEET">
+      <mat-error *ngIf="inputForm.get('subject')?.invalid">Subject is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary" class="w-full">
+      <mat-label>Difficulty</mat-label>
+      <input matInput formControlName="difficulty" placeholder="e.g. Easy, Hard">
+      <mat-error *ngIf="inputForm.get('difficulty')?.invalid">Difficulty is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- API Level error -->
+  <div *ngIf="errorMsg" class="w-full bg-red-900/40 text-error px-4 py-3 rounded border border-red-800 text-sm">
+    ❌ {{errorMsg}}
+  </div>
+
+  <div class="flex justify-end pt-2 border-t border-gray-800">
+    <button 
+      type="submit" 
+      [disabled]="inputForm.invalid || isLoading"
+      class="bg-primary hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-400 text-white font-bold py-3 px-8 rounded flex items-center gap-2 transition-all shadow-md">
+      
+      <ng-container *ngIf="!isLoading">
+        <span>⚡</span> Process Questions
+      </ng-container>
+
+      <ng-container *ngIf="isLoading">
+        <mat-spinner diameter="20" color="accent"></mat-spinner> Parsing {{charCount}} chars...
+      </ng-container>
+
+    </button>
+  </div>
+</form>

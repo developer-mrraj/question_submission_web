@@ -1,0 +1,35 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  
+  <!-- Total Card -->
+  <div class="bg-surface border border-gray-800 rounded-lg p-6 shadow-md flex items-center gap-4 animate-slide-up hover:-translate-y-1 transition-transform">
+    <div class="bg-blue-900/40 text-primary p-3 rounded-full text-2xl w-12 h-12 flex items-center justify-center">📋</div>
+    <div>
+      <p class="text-textMuted text-sm font-semibold uppercase tracking-wider">Total Detected</p>
+      <p class="text-3xl font-mono font-bold text-white">{{displayTotal | number}}</p>
+    </div>
+  </div>
+
+  <!-- Valid Card -->
+  <div class="bg-surface border border-gray-800 rounded-lg p-6 shadow-md flex items-center gap-4 animate-slide-up hover:-translate-y-1 transition-transform" style="animation-delay: 50ms;">
+    <div class="bg-green-900/40 text-success p-3 rounded-full text-2xl w-12 h-12 flex items-center justify-center">✅</div>
+    <div>
+      <p class="text-textMuted text-sm font-semibold uppercase tracking-wider">Successfully Parsed</p>
+      <p class="text-3xl font-mono font-bold text-white">{{displayValid | number}}</p>
+    </div>
+  </div>
+
+  <!-- Error Card -->
+  <div class="rounded-lg p-6 shadow-md flex items-center gap-4 animate-slide-up hover:-translate-y-1 transition-transform border"
+       [ngClass]="summary.errors > 0 ? 'bg-red-900/10 border-error/50' : 'bg-surface border-gray-800'"
+       style="animation-delay: 100ms;">
+    
+    <div class="p-3 rounded-full text-2xl w-12 h-12 flex items-center justify-center"
+         [ngClass]="summary.errors > 0 ? 'bg-red-900/40 text-error' : 'bg-gray-800/50 text-textMuted'">❌</div>
+    
+    <div>
+      <p class="text-textMuted text-sm font-semibold uppercase tracking-wider">Errors Found</p>
+      <p class="text-3xl font-mono font-bold" [ngClass]="summary.errors > 0 ? 'text-error' : 'text-textMuted'">{{displayErrors | number}}</p>
+    </div>
+  </div>
+
+</div>

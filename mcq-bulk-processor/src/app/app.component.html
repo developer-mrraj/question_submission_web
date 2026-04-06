@@ -1,0 +1,72 @@
+<div class="min-h-screen bg-background text-textPrimary py-4 sm:py-8 px-3 sm:px-4 flex flex-col items-center font-sans">
+
+  <!-- HEADER -->
+  <header class="w-full max-w-5xl mb-5 sm:mb-8 flex flex-col pt-2 sm:pt-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">MCQ Bulk Processor</h1>
+        <p class="text-textMuted mt-1 text-xs sm:text-sm">Convert → Preview → Parse → Export</p>
+      </div>
+      <div class="self-start sm:self-auto bg-surface border border-gray-800 px-2.5 py-1 rounded text-xs text-textMuted flex items-center space-x-2">
+        <span class="w-2 h-2 rounded-full bg-warning inline-block flex-shrink-0"></span>
+        <span>Stateless · No Data Stored</span>
+      </div>
+    </div>
+
+    <!-- Step Progress Bar -->
+    <div class="flex items-center mt-4 sm:mt-6 gap-1 sm:gap-2 overflow-x-auto pb-1">
+      <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0" *ngFor="let s of [1, 2, 3]; let i = index">
+        <div
+          class="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full text-xs sm:text-sm font-bold border-2 transition-colors flex-shrink-0"
+          [ngClass]="{
+            'bg-primary border-primary text-white': currentStep === s,
+            'bg-green-700 border-green-700 text-white': currentStep > s,
+            'bg-surface border-gray-600 text-textMuted': currentStep < s
+          }">
+          <span *ngIf="currentStep <= s">{{s}}</span>
+          <span *ngIf="currentStep > s">✓</span>
+        </div>
+        <span class="text-xs font-medium whitespace-nowrap"
+          [ngClass]="currentStep === s ? 'text-white' : 'text-textMuted'">
+          {{ s === 1 ? 'Paste & Convert' : s === 2 ? 'Preview & Parse' : 'Export' }}
+        </span>
+        <div *ngIf="i < 2" class="w-6 sm:w-12 h-px bg-gray-700 mx-0.5 sm:mx-1 flex-shrink-0"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- GLOBAL ERROR BANNER -->
+  <div *ngIf="errorMsg" class="w-full max-w-5xl mb-4 bg-red-900/40 text-red-300 px-4 py-3 rounded border border-red-800 text-sm flex items-center gap-2">
+    ❌ {{errorMsg}}
+    <button (click)="errorMsg = null" class="ml-auto text-xs text-gray-400 hover:text-white">✕</button>
+  </div>
+
+  <main class="w-full max-w-5xl space-y-6">
+
+    <!-- STEP 1: Convert -->
+    <app-step1-convert
+      *ngIf="currentStep === 1"
+      [isLoading]="isLoading"
+      (convert)="onConvert($event)">
+    </app-step1-convert>
+
+    <!-- STEP 2: Preview + Parse -->
+    <app-step2-preview
+      *ngIf="currentStep === 2"
+      [questions]="convertedQuestions"
+      [isLoading]="isLoading"
+      (parse)="onParse($event)"
+      (back)="onBackToInput()">
+    </app-step2-preview>
+
+    <!-- STEP 3: Final table + Export -->
+    <app-step3-export
+      *ngIf="currentStep === 3"
+      [questions]="flatQuestions"
+      (export)="onExport()"
+      (back)="onBackToPreview()"
+      (reset)="onReset()">
+    </app-step3-export>
+
+  </main>
+</div>

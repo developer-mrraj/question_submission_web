@@ -1,0 +1,22 @@
+<div class="bg-red-900/10 border border-error/50 rounded-lg p-6 shadow-md flex flex-col gap-4 w-full">
+  <div class="flex items-center justify-between border-b border-error/20 pb-2">
+    <h3 class="text-lg font-bold text-error flex items-center gap-2">
+      ⚠️ {{errors.length}} Errors Found — Fix in raw text and reprocess
+    </h3>
+    <a href="#" (click)="$event.preventDefault(); scrollToTop()" class="text-xs text-primary hover:text-blue-400 font-semibold underline decoration-dotted transition-colors flex items-center gap-1">
+      🔄 Reprocess to fix
+    </a>
+  </div>
+
+  <div class="overflow-y-auto max-h-[250px] pr-2 custom-scrollbar">
+    <ul class="flex flex-col gap-2">
+      <li *ngFor="let err of errors" class="flex items-center gap-4 bg-red-900/20 px-4 py-2 rounded">
+        <span class="bg-error/20 text-error font-mono font-bold text-xs px-2 py-1 rounded w-[45px] text-center border border-error/30">
+          Q{{err.questionNumber}}
+        </span>
+        <span class="text-textMuted text-sm font-bold opacity-50">&rarr;</span>
+        <span class="text-[#e2e8f0] text-sm">{{err.reason}}</span>
+      </li>
+    </ul>
+  </div>
+</div>

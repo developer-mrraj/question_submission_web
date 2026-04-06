@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ParsedQuestion, ParseRequest, ParsedFlatQuestion } from '../models/question.model';
+import { ParsedQuestion, ParseRequest, ParsedFlatQuestion, ParsedFlatDQQuestion } from '../models/question.model';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionService {
@@ -24,5 +24,23 @@ export class QuestionService {
   /** Step 3: GET /export — trigger browser file download */
   exportToExcel(): void {
     window.location.href = `${this.API_URL}/export`;
+  }
+
+  // ── DQ endpoints ─────────────────────────────────────────────────────
+
+  /** DQ Step 1: POST /convert/dq — raw text → structured questions */
+  convertDQText(rawText: string): Observable<ParsedQuestion[]> {
+    const headers = new HttpHeaders({ 'Content-Type': 'text/plain' });
+    return this.http.post<ParsedQuestion[]>(`${this.API_URL}/convert/dq`, rawText, { headers });
+  }
+
+  /** DQ Step 2: POST /parse/dq — sends questions + metadata, returns DQ flat questions */
+  parseDQQuestions(payload: ParseRequest): Observable<ParsedFlatDQQuestion[]> {
+    return this.http.post<ParsedFlatDQQuestion[]>(`${this.API_URL}/parse/dq`, payload);
+  }
+
+  /** DQ Step 3: GET /export/dq — trigger browser file download */
+  exportDQToExcel(): void {
+    window.location.href = `${this.API_URL}/export/dq`;
   }
 }

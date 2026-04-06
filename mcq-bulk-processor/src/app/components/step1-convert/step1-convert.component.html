@@ -1,10 +1,10 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-surface rounded-lg shadow-lg border border-gray-800 p-4 sm:p-6 flex flex-col gap-4 sm:gap-6">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-surface rounded-lg shadow-lg border border-gray-200 p-4 sm:p-6 flex flex-col gap-4 sm:gap-6">
 
   <div>
     <label class="text-textPrimary font-semibold text-sm mb-2 block">Paste Raw Questions Here *</label>
     <textarea
       formControlName="rawText"
-      class="w-full bg-[#0b0c10] text-[#e2e8f0] border border-gray-700 rounded p-3 sm:p-4 font-mono text-base leading-6 resize-y focus:outline-none focus:border-primary transition-colors min-h-[280px] sm:min-h-[340px]"
+      class="w-full bg-gray-50 text-gray-800 border border-gray-300 rounded p-3 sm:p-4 font-mono text-base leading-6 resize-y focus:outline-none focus:border-primary transition-colors min-h-[280px] sm:min-h-[340px]"
       placeholder="Q1. What is 2+2?&#10;A) 1&#10;B) 2&#10;C) 4&#10;D) 5&#10;✅ Ans: C&#10;&#10;Q2. ...">
     </textarea>
     <div class="flex justify-between mt-1 px-1">
@@ -15,11 +15,11 @@
     </div>
   </div>
 
-  <div class="flex justify-end pt-2 border-t border-gray-800">
+  <div class="flex justify-end pt-2 border-t border-gray-200">
     <button
       type="submit"
       [disabled]="form.invalid || isLoading"
-      class="w-full sm:w-auto bg-primary hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-400 text-white font-bold py-3 px-8 rounded flex items-center justify-center gap-2 transition-all shadow-md">
+      class="w-full sm:w-auto bg-primary hover:bg-blue-500 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-3 px-8 rounded flex items-center justify-center gap-2 transition-all shadow-md">
       <ng-container *ngIf="!isLoading">⚡ Convert Questions</ng-container>
       <ng-container *ngIf="isLoading">
         <mat-spinner diameter="20" color="accent"></mat-spinner>&nbsp;Converting...

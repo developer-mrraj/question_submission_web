@@ -6,13 +6,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#0f1117',
-        surface: '#1a1d26',
-        primary: '#4f8ef7',
-        success: '#22c55e',
-        error: '#ef4444',
-        warning: '#f59e0b',
-        textPrimary: '#e2e8f0',
+        background: '#f5f7fa',
+        surface: '#ffffff',
+        primary: '#3b72f0',
+        success: '#16a34a',
+        error: '#dc2626',
+        warning: '#d97706',
+        textPrimary: '#0f172a',
         textMuted: '#64748b',
       },
       fontFamily: {

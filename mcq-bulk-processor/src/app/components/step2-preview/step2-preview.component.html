@@ -1,32 +1,80 @@
 <div class="flex flex-col gap-6">
 
   <!-- Summary bar -->
-  <div class="bg-surface border border-gray-800 rounded-lg px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+  <div class="bg-surface border border-gray-200 rounded-lg px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
     <div>
-      <h2 class="text-white font-bold text-base sm:text-lg">Step 2 — Preview & Configure</h2>
-      <p class="text-textMuted text-xs sm:text-sm mt-1">Review the {{questions.length}} questions extracted from your text, then set metadata and submit to parse.</p>
+      <h2 class="text-textPrimary font-bold text-base sm:text-lg">Step 2 — Preview &amp; Configure</h2>
+      <p class="text-textMuted text-xs sm:text-sm mt-1">
+        Review the {{localQuestions.length}} questions extracted from your text, then set metadata and submit to parse.
+      </p>
     </div>
-    <span class="self-start sm:self-auto text-success text-xs sm:text-sm font-mono bg-green-900/30 border border-green-800 px-3 py-1 rounded-full whitespace-nowrap">{{questions.length}} questions found</span>
+    <div class="flex items-center gap-2 self-start sm:self-auto">
+      <span *ngIf="mode === 'dq'"
+        class="text-purple-700 text-xs font-semibold bg-purple-100 border border-purple-300 px-3 py-1 rounded-full whitespace-nowrap">
+        ⬡ Decision &amp; Quiz
+      </span>
+      <span class="text-green-700 text-xs sm:text-sm font-mono bg-green-50 border border-green-300 px-3 py-1 rounded-full whitespace-nowrap">
+        {{localQuestions.length}} questions found
+      </span>
+    </div>
   </div>
 
   <!-- Scrollable question preview -->
-  <div class="bg-surface border border-gray-800 rounded-lg overflow-hidden">
-    <div class="overflow-y-auto max-h-[280px] sm:max-h-[380px] divide-y divide-gray-800">
-      <div *ngFor="let q of questions" class="px-4 sm:px-6 py-3 sm:py-4 hover:bg-gray-800/30 transition-colors">
+  <div class="bg-surface border border-gray-200 rounded-lg overflow-hidden">
+    <div class="overflow-y-auto max-h-[420px] sm:max-h-[520px] divide-y divide-gray-100">
+      <div *ngFor="let q of localQuestions; let i = index"
+        class="px-4 sm:px-6 py-4 sm:py-5 hover:bg-blue-50/50 transition-colors">
+
         <div class="flex items-start gap-2 sm:gap-3">
-          <span class="text-primary font-mono text-xs bg-primary/10 border border-primary/20 px-2 py-0.5 rounded mt-0.5 flex-shrink-0">Q{{q.number}}</span>
-          <div class="flex-1 min-w-0">
+          <!-- Question number badge -->
+          <span class="text-primary font-mono text-xs bg-blue-50 border border-blue-200 px-2 py-0.5 rounded mt-0.5 flex-shrink-0">
+            Q{{q.number}}
+          </span>
+
+          <div class="flex-1 min-w-0 flex flex-col gap-2">
+
+            <!-- ── DQ ONLY: Title editable field ── -->
+            <div *ngIf="mode === 'dq'" class="flex items-center gap-2">
+              <span style="font-size:11px;font-weight:700;color:#4f46e5;background:#eef2ff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">
+                📌 Title
+              </span>
+              <input
+                [(ngModel)]="q.title"
+                [name]="'title_' + i"
+                placeholder="Auto-extracted title (editable)"
+                style="flex:1;min-width:0;background:#f0f4ff;border:1px solid #c7d2fe;border-radius:4px;padding:3px 8px;font-size:12px;color:#3730a3;outline:none;"
+                class="hover:border-indigo-400 focus:border-indigo-500 transition-colors"
+              />
+            </div>
+
+            <!-- Question text -->
             <p class="text-textPrimary text-sm font-medium leading-snug">{{q.text}}</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mt-2">
+
+            <!-- Options grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
               <div *ngFor="let key of getOptionKeys(q.options)"
                 class="text-xs px-2 sm:px-3 py-1.5 rounded"
                 [ngClass]="q.answer === key
-                  ? 'bg-green-900/40 text-green-300 border border-green-800 font-bold'
-                  : 'bg-gray-800/60 text-textMuted border border-gray-700'">
+                  ? 'bg-green-100 text-green-800 border border-green-300 font-bold'
+                  : 'bg-gray-100 text-gray-600 border border-gray-200'">
                 <span class="font-bold mr-1">{{key}})</span> {{q.options[key]}}
                 <span *ngIf="q.answer === key" class="ml-1">✓</span>
               </div>
             </div>
+
+            <!-- ── DQ ONLY: Explanation editable field ── -->
+            <div *ngIf="mode === 'dq'"
+              style="margin-top:6px;padding:8px 12px;background:#f0fdf4;border-left:3px solid #4caf50;border-radius:4px;">
+              <p style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:4px;">💡 Explanation</p>
+              <textarea
+                [(ngModel)]="q.explanation"
+                [name]="'expl_' + i"
+                rows="2"
+                placeholder="No explanation provided"
+                style="width:100%;background:transparent;border:none;outline:none;font-size:13px;color:#166534;resize:vertical;line-height:1.5;"
+              ></textarea>
+            </div>
+
           </div>
         </div>
       </div>
@@ -34,13 +82,14 @@
   </div>
 
   <!-- Metadata form + Parse button -->
-  <form [formGroup]="metaForm" (ngSubmit)="onSubmit()" class="bg-surface border border-gray-800 rounded-lg p-4 sm:p-6 flex flex-col gap-4">
-    <h3 class="text-white font-semibold text-sm">Set Question Metadata</h3>
+  <form [formGroup]="metaForm" (ngSubmit)="onSubmit()"
+    class="bg-surface border border-gray-200 rounded-lg p-4 sm:p-6 flex flex-col gap-4">
+    <h3 class="text-textPrimary font-semibold text-sm">Set Question Metadata</h3>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <mat-form-field appearance="outline" color="primary" class="w-full">
         <mat-label>Module / Subject</mat-label>
-        <input matInput formControlName="subject" placeholder="e.g. Physics, NEET, Practice Test">
+        <input matInput formControlName="subject" placeholder="e.g. Decision Making, Practice Test">
         <mat-error>Subject is required</mat-error>
       </mat-form-field>
 
@@ -51,14 +100,14 @@
       </mat-form-field>
     </div>
 
-    <div class="flex flex-col-reverse sm:flex-row sm:justify-between items-stretch sm:items-center gap-3 pt-2 border-t border-gray-800">
+    <div class="flex flex-col-reverse sm:flex-row sm:justify-between items-stretch sm:items-center gap-3 pt-2 border-t border-gray-200">
       <button type="button" (click)="back.emit()"
-        class="text-textMuted hover:text-white border border-gray-700 hover:border-gray-500 font-medium py-2.5 px-5 rounded transition-all text-sm text-center">
+        class="text-textMuted hover:text-textPrimary border border-gray-300 hover:border-gray-400 font-medium py-2.5 px-5 rounded transition-all text-sm text-center">
         ← Back
       </button>
       <button type="submit" [disabled]="metaForm.invalid || isLoading"
-        class="bg-primary hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-400 text-white font-bold py-3 px-8 rounded flex items-center justify-center gap-2 transition-all shadow-md">
-        <ng-container *ngIf="!isLoading">🔍 Submit & Parse</ng-container>
+        class="bg-primary hover:bg-blue-500 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-3 px-8 rounded flex items-center justify-center gap-2 transition-all shadow-md">
+        <ng-container *ngIf="!isLoading">🔍 Submit &amp; Parse</ng-container>
         <ng-container *ngIf="isLoading">
           <mat-spinner diameter="20" color="accent"></mat-spinner>&nbsp;Parsing...
         </ng-container>

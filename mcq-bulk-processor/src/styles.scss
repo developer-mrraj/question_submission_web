@@ -21,7 +21,7 @@ html {
 
 body {
   // Set the default to dark for the industrial utilitarian theme
-  color-scheme: dark;
+  color-scheme: light;
 
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
@@ -91,7 +91,7 @@ body {
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #334155;
+    background-color: #cbd5e1;
     border-radius: 10px;
   }
 }

@@ -1,21 +1,25 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuestionService } from './services/question.service';
-import { ParsedQuestion, ParsedFlatQuestion, ParseRequest } from './models/question.model';
+import { ParsedQuestion, ParsedFlatQuestion, ParsedFlatDQQuestion, ParseRequest, Mode } from './models/question.model';
 
 // Child components
+import { HomeComponent } from './components/home/home.component';
 import { Step1ConvertComponent } from './components/step1-convert/step1-convert.component';
-import { Step2PreviewComponent } from './components/step2-preview/step2-preview.component';
+import { Step2PreviewComponent, ParsePayload } from './components/step2-preview/step2-preview.component';
 import { Step3ExportComponent } from './components/step3-export/step3-export.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, Step1ConvertComponent, Step2PreviewComponent, Step3ExportComponent],
+  imports: [CommonModule, HomeComponent, Step1ConvertComponent, Step2PreviewComponent, Step3ExportComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  /** Current step in the wizard */
+  /** Home → mode selection; 'home' shows the landing page */
+  mode: 'home' | Mode = 'home';
+
+  /** Current step in the wizard (shared across both flows) */
   currentStep: 1 | 2 | 3 = 1;
 
   /** Loading / error state */
@@ -33,10 +37,19 @@ export class AppComponent {
   difficulty = '';
   subject = '';
 
-  /** Final flattened data from /parse (shown in step 3) */
+  /** MCQ — final flattened data from /parse */
   flatQuestions: ParsedFlatQuestion[] = [];
 
+  /** DQ — final flattened data from /parse/dq */
+  flatDQQuestions: ParsedFlatDQQuestion[] = [];
+
   constructor(private svc: QuestionService) {}
+
+  // ── HOME ─────────────────────────────────────────────────
+  onSelectMode(m: Mode) {
+    this.mode = m;
+    this._resetWizard();
+  }
 
   // ── STEP 1 ──────────────────────────────────────────────
   onConvert(payload: { rawText: string; classLevel: string }) {
@@ -46,7 +59,11 @@ export class AppComponent {
     this.errorMsg = null;
     this.convertedQuestions = [];
 
-    this.svc.convertText(payload.rawText).subscribe({
+    const obs = this.mode === 'dq'
+      ? this.svc.convertDQText(payload.rawText)
+      : this.svc.convertText(payload.rawText);
+
+    obs.subscribe({
       next: res => {
         this.convertedQuestions = res;
         this.currentStep = 2;
@@ -60,47 +77,65 @@ export class AppComponent {
   }
 
   // ── STEP 2 ──────────────────────────────────────────────
-  onParse(payload: { difficulty: string; subject: string }) {
+  onParse(payload: ParsePayload) {
     this.difficulty = payload.difficulty;
     this.subject = payload.subject;
     this.isLoading = true;
     this.errorMsg = null;
     this.flatQuestions = [];
+    this.flatDQQuestions = [];
 
-    const request: ParseRequest = {
-      difficulty: payload.difficulty,
-      module: payload.subject,
-      questions: this.convertedQuestions
-    };
-
-    this.svc.parseQuestions(request).subscribe({
-      next: res => {
-        this.flatQuestions = res;
-        this.currentStep = 3;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.errorMsg = 'Parsing failed. Please check backend logs.';
-        this.isLoading = false;
-      }
-    });
+    if (this.mode === 'dq') {
+      // Pass the edited questions (with title + explanation) straight to the backend
+      const request: ParseRequest = {
+        difficulty: payload.difficulty,
+        module: payload.subject,
+        questions: payload.questions
+      };
+      this.svc.parseDQQuestions(request).subscribe({
+        next: res => {
+          this.flatDQQuestions = res;
+          this.currentStep = 3;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMsg = 'Parsing failed. Please check backend logs.';
+          this.isLoading = false;
+        }
+      });
+    } else {
+      const request: ParseRequest = {
+        difficulty: payload.difficulty,
+        module: payload.subject,
+        questions: this.convertedQuestions
+      };
+      this.svc.parseQuestions(request).subscribe({
+        next: res => {
+          this.flatQuestions = res;
+          this.currentStep = 3;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.errorMsg = 'Parsing failed. Please check backend logs.';
+          this.isLoading = false;
+        }
+      });
+    }
   }
 
   // ── STEP 3 ──────────────────────────────────────────────
   onExport() {
-    this.svc.exportToExcel();
+    if (this.mode === 'dq') {
+      this.svc.exportDQToExcel();
+    } else {
+      this.svc.exportToExcel();
+    }
   }
 
-  /** Go back to step 1 and reset everything */
+  /** Reset wizard and return to home screen */
   onReset() {
-    this.currentStep = 1;
-    this.rawText = '';
-    this.classLevel = '';
-    this.convertedQuestions = [];
-    this.flatQuestions = [];
-    this.difficulty = '';
-    this.subject = '';
-    this.errorMsg = null;
+    this.mode = 'home';
+    this._resetWizard();
   }
 
   /** Go back from step 3 → step 2 */
@@ -113,5 +148,18 @@ export class AppComponent {
   onBackToInput() {
     this.currentStep = 1;
     this.errorMsg = null;
+  }
+
+  private _resetWizard() {
+    this.currentStep = 1;
+    this.rawText = '';
+    this.classLevel = '';
+    this.convertedQuestions = [];
+    this.flatQuestions = [];
+    this.flatDQQuestions = [];
+    this.difficulty = '';
+    this.subject = '';
+    this.errorMsg = null;
+    this.isLoading = false;
   }
 }

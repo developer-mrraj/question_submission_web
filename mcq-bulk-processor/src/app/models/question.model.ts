@@ -1,3 +1,6 @@
+// ---- Mode type ----
+export type Mode = 'mcq' | 'dq';
+
 // ---- Step 1: /convert ----
 // Request: raw text (string)
 // Response: ParsedQuestion[]
@@ -6,6 +9,8 @@ export interface ParsedQuestion {
   text: string;
   options: { [key: string]: string }; // e.g. { "A": "Option 1", "B": "..." }
   answer: string;                     // e.g. "B"
+  title?: string;        // DQ only — auto-extracted from (brackets)
+  explanation?: string;  // DQ only — auto-extracted from "Explanation:" line
 }
 
 // ---- Step 2: /parse ----
@@ -29,6 +34,12 @@ export interface ParsedFlatQuestion {
   option3_is_correct: boolean;
   option4_text: string;
   option4_is_correct: boolean;
+}
+
+// ---- DQ Step 2: /parse/dq — 2 extra fields ----
+export interface ParsedFlatDQQuestion extends ParsedFlatQuestion {
+  title: string;       // auto-extracted from (brackets)
+  explanation: string; // auto-extracted from "Explanation:" line
 }
 
 // ---- App-level state helpers ----

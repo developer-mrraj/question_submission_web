@@ -1,22 +1,26 @@
 <div class="flex flex-col gap-6">
 
   <!-- Summary header -->
-  <div class="bg-surface border border-gray-800 rounded-lg px-6 py-4 flex items-center justify-between">
+  <div class="bg-surface border border-gray-200 rounded-lg px-6 py-4 flex items-center justify-between">
     <div>
-      <h2 class="text-white font-bold text-lg">Step 3 — Review & Export</h2>
-      <p class="text-textMuted text-sm mt-1">{{questions.length}} questions parsed successfully. Download the Excel file when ready.</p>
+      <h2 class="text-textPrimary font-bold text-lg">Step 3 — Review &amp; Export</h2>
+      <p class="text-textMuted text-sm mt-1">
+        <ng-container *ngIf="mode === 'mcq'">{{questions.length}} questions parsed successfully.</ng-container>
+        <ng-container *ngIf="mode === 'dq'">{{dqQuestions.length}} DQ questions parsed successfully.</ng-container>
+        Download the Excel file when ready.
+      </p>
     </div>
     <button (click)="export.emit()"
-      class="bg-green-700 hover:bg-green-600 text-white font-bold py-2.5 px-6 rounded flex items-center gap-2 transition-all shadow-lg text-sm">
+      class="bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-6 rounded flex items-center gap-2 transition-all shadow-lg text-sm">
       📥 Download Excel
     </button>
   </div>
 
-  <!-- Flat question table -->
-  <div class="bg-surface rounded-lg shadow-lg border border-gray-800 overflow-hidden">
+  <!-- ── MCQ table (11 columns) ── -->
+  <div *ngIf="mode === 'mcq'" class="bg-surface rounded-lg shadow border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto overflow-y-auto max-h-[460px]">
       <table class="w-full text-left text-sm whitespace-nowrap">
-        <thead class="sticky top-0 bg-[#1e222d] text-textMuted uppercase text-xs z-10 border-b border-gray-800">
+        <thead class="sticky top-0 bg-gray-50 text-gray-500 uppercase text-xs z-10 border-b border-gray-200">
           <tr>
             <th class="py-3 px-4 w-10 text-center">#</th>
             <th class="py-3 px-4 min-w-[200px]">Question</th>
@@ -28,38 +32,38 @@
             <th class="py-3 px-4 min-w-[120px]">Option 4</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-800">
-          <tr *ngFor="let q of questions; let i = index" class="hover:bg-gray-800/30 transition-colors">
-            <td class="py-3 px-4 text-center font-mono text-textMuted text-xs">{{i + 1}}</td>
+        <tbody class="divide-y divide-gray-100">
+          <tr *ngFor="let q of questions; let i = index" class="hover:bg-blue-50/50 transition-colors">
+            <td class="py-3 px-4 text-center font-mono text-gray-400 text-xs">{{i + 1}}</td>
             <td class="py-3 px-4 text-textPrimary max-w-[240px]">
               <span class="block truncate" [title]="q.text">{{q.text}}</span>
             </td>
             <td class="py-3 px-4 text-textMuted text-xs">
-              <span class="px-2 py-0.5 bg-gray-800 border border-gray-700 rounded">{{q.difficulty}}</span>
+              <span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-gray-700">{{q.difficulty}}</span>
             </td>
             <td class="py-3 px-4 text-textMuted text-xs">
-              <span class="px-2 py-0.5 bg-gray-800 border border-gray-700 rounded">{{q.module}}</span>
+              <span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-gray-700">{{q.module}}</span>
             </td>
             <td class="py-3 px-4 text-xs"
-              [ngClass]="q.option1_is_correct ? 'text-green-300 font-bold bg-green-900/10' : 'text-textMuted'">
+              [ngClass]="q.option1_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
               <span class="block truncate max-w-[120px]" [title]="q.option1_text">
                 {{q.option1_text}}<span *ngIf="q.option1_is_correct"> ✓</span>
               </span>
             </td>
             <td class="py-3 px-4 text-xs"
-              [ngClass]="q.option2_is_correct ? 'text-green-300 font-bold bg-green-900/10' : 'text-textMuted'">
+              [ngClass]="q.option2_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
               <span class="block truncate max-w-[120px]" [title]="q.option2_text">
                 {{q.option2_text}}<span *ngIf="q.option2_is_correct"> ✓</span>
               </span>
             </td>
             <td class="py-3 px-4 text-xs"
-              [ngClass]="q.option3_is_correct ? 'text-green-300 font-bold bg-green-900/10' : 'text-textMuted'">
+              [ngClass]="q.option3_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
               <span class="block truncate max-w-[120px]" [title]="q.option3_text">
                 {{q.option3_text}}<span *ngIf="q.option3_is_correct"> ✓</span>
               </span>
             </td>
             <td class="py-3 px-4 text-xs"
-              [ngClass]="q.option4_is_correct ? 'text-green-300 font-bold bg-green-900/10' : 'text-textMuted'">
+              [ngClass]="q.option4_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
               <span class="block truncate max-w-[120px]" [title]="q.option4_text">
                 {{q.option4_text}}<span *ngIf="q.option4_is_correct"> ✓</span>
               </span>
@@ -70,14 +74,80 @@
     </div>
   </div>
 
+  <!-- ── DQ table (13 columns: +Title, +Explanation) ── -->
+  <div *ngIf="mode === 'dq'" class="bg-surface rounded-lg shadow border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto overflow-y-auto max-h-[460px]">
+      <table class="w-full text-left text-sm whitespace-nowrap">
+        <thead class="sticky top-0 bg-gray-50 text-gray-500 uppercase text-xs z-10 border-b border-gray-200">
+          <tr>
+            <th class="py-3 px-4 w-10 text-center">#</th>
+            <th class="py-3 px-4 min-w-[160px]">Title</th>
+            <th class="py-3 px-4 min-w-[200px]">Question</th>
+            <th class="py-3 px-4">Difficulty</th>
+            <th class="py-3 px-4">Module</th>
+            <th class="py-3 px-4 min-w-[120px]">Option 1</th>
+            <th class="py-3 px-4 min-w-[120px]">Option 2</th>
+            <th class="py-3 px-4 min-w-[120px]">Option 3</th>
+            <th class="py-3 px-4 min-w-[120px]">Option 4</th>
+            <th class="py-3 px-4 min-w-[200px]">Explanation</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr *ngFor="let q of dqQuestions; let i = index" class="hover:bg-blue-50/50 transition-colors">
+            <td class="py-3 px-4 text-center font-mono text-gray-400 text-xs">{{i + 1}}</td>
+            <td class="py-3 px-4 text-indigo-600 text-xs max-w-[160px]">
+              <span class="block truncate" [title]="q.title">{{q.title}}</span>
+            </td>
+            <td class="py-3 px-4 text-textPrimary max-w-[240px]">
+              <span class="block truncate" [title]="q.text">{{q.text}}</span>
+            </td>
+            <td class="py-3 px-4 text-textMuted text-xs">
+              <span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-gray-700">{{q.difficulty}}</span>
+            </td>
+            <td class="py-3 px-4 text-textMuted text-xs">
+              <span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-gray-700">{{q.module}}</span>
+            </td>
+            <td class="py-3 px-4 text-xs"
+              [ngClass]="q.option1_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
+              <span class="block truncate max-w-[120px]" [title]="q.option1_text">
+                {{q.option1_text}}<span *ngIf="q.option1_is_correct"> ✓</span>
+              </span>
+            </td>
+            <td class="py-3 px-4 text-xs"
+              [ngClass]="q.option2_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
+              <span class="block truncate max-w-[120px]" [title]="q.option2_text">
+                {{q.option2_text}}<span *ngIf="q.option2_is_correct"> ✓</span>
+              </span>
+            </td>
+            <td class="py-3 px-4 text-xs"
+              [ngClass]="q.option3_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
+              <span class="block truncate max-w-[120px]" [title]="q.option3_text">
+                {{q.option3_text}}<span *ngIf="q.option3_is_correct"> ✓</span>
+              </span>
+            </td>
+            <td class="py-3 px-4 text-xs"
+              [ngClass]="q.option4_is_correct ? 'text-green-700 font-bold bg-green-50' : 'text-gray-600'">
+              <span class="block truncate max-w-[120px]" [title]="q.option4_text">
+                {{q.option4_text}}<span *ngIf="q.option4_is_correct"> ✓</span>
+              </span>
+            </td>
+            <td class="py-3 px-4 text-gray-600 text-xs max-w-[200px]">
+              <span class="block truncate" [title]="q.explanation">{{q.explanation}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- Bottom actions -->
   <div class="flex justify-between">
     <button (click)="back.emit()"
-      class="text-textMuted hover:text-white border border-gray-700 hover:border-gray-500 font-medium py-2 px-5 rounded transition-all text-sm">
+      class="text-textMuted hover:text-textPrimary border border-gray-300 hover:border-gray-400 font-medium py-2 px-5 rounded transition-all text-sm">
       ← Back to Preview
     </button>
     <button (click)="reset.emit()"
-      class="text-textMuted hover:text-white border border-gray-700 hover:border-gray-500 font-medium py-2 px-5 rounded transition-all text-sm">
+      class="text-textMuted hover:text-textPrimary border border-gray-300 hover:border-gray-400 font-medium py-2 px-5 rounded transition-all text-sm">
       🔄 Start Over
     </button>
   </div>

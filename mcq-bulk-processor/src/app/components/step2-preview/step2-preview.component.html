@@ -88,9 +88,13 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <mat-form-field appearance="outline" color="primary" class="w-full">
-        <mat-label>Module / Subject</mat-label>
-        <input matInput formControlName="subject" placeholder="e.g. Decision Making, Practice Test">
-        <mat-error>Subject is required</mat-error>
+        <mat-label>Module</mat-label>
+        <mat-select formControlName="subject" id="select-module">
+          <mat-option *ngFor="let m of modules" [value]="m.value">
+            {{ m.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Module is required</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" color="primary" class="w-full">

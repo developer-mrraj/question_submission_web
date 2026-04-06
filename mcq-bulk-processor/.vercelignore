@@ -1,0 +1,3 @@
+# Exclude heavy folders from upload (Vercel will run npm install itself)
+node_modules/
+.angular/

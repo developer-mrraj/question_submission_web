@@ -1,6 +1,7 @@
 // ---- Mode type ----
 export type Mode = 'mcq' | 'dq';
 
+
 // ---- Step 1: /convert ----
 // Request: raw text (string)
 // Response: ParsedQuestion[]

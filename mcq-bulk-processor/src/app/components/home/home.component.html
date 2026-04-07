@@ -1,289 +1,425 @@
 <div class="home-wrapper">
 
-  <!-- Animated background blobs -->
+  <!-- Animated blobs -->
   <div class="blob blob-blue"></div>
   <div class="blob blob-purple"></div>
 
   <!-- Content -->
   <div class="home-content">
 
-    <!-- Logo / Heading -->
+    <!-- Header -->
     <div class="home-header">
       <div class="home-logo">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="40" height="40" rx="10" fill="url(#logoGrad)"/>
-          <path d="M10 14h6M10 20h14M10 26h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-          <circle cx="30" cy="14" r="4" fill="#fff" fill-opacity="0.9"/>
+          <rect width="40" height="40" rx="10" fill="url(#lg)" />
+          <path d="M10 14h6M10 20h14M10 26h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round" />
+          <circle cx="30" cy="14" r="4" fill="#fff" fill-opacity="0.9" />
           <defs>
-            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#3b82f6"/>
-              <stop offset="1" stop-color="#8b5cf6"/>
+            <linearGradient id="lg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#3b82f6" />
+              <stop offset="1" stop-color="#8b5cf6" />
             </linearGradient>
           </defs>
         </svg>
       </div>
       <h1 class="home-title">MCQ Bulk Processor</h1>
-      <p class="home-sub">Choose the question type you want to process</p>
+      <p class="home-sub">Select a question category to get started</p>
     </div>
 
-    <!-- Cards -->
+    <!-- Two cards -->
     <div class="cards-grid">
 
-      <!-- Card 1: Other (MCQ) -->
-      <button class="mode-card card-mcq" (click)="selectMode.emit('mcq')" id="btn-mode-mcq">
-        <div class="card-icon-wrap icon-blue">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="18" cy="18" r="18" fill="#3b82f6" fill-opacity="0.15"/>
-            <path d="M10 12h16M10 18h10M10 24h12" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="28" cy="12" r="3" fill="#60a5fa"/>
-            <path d="M26.5 11.5l1 1 2-2" stroke="#1e3a5f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h2 class="card-title">Other (MCQ)</h2>
-        <p class="card-desc">
-          Standard multiple-choice questions.<br>
-          11-column Excel output.
-        </p>
-        <div class="card-pills">
-          <span class="pill pill-blue">POST /convert</span>
-          <span class="pill pill-blue">POST /parse</span>
-          <span class="pill pill-blue">GET /export</span>
-        </div>
-        <span class="card-arrow">→</span>
-      </button>
-
-      <!-- Card 2: Decision & Quiz -->
+      <!-- ── Card 1: Decision & Quiz ── -->
       <button class="mode-card card-dq" (click)="selectMode.emit('dq')" id="btn-mode-dq">
-        <div class="card-icon-wrap icon-purple">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="18" cy="18" r="18" fill="#8b5cf6" fill-opacity="0.15"/>
-            <!-- branching path -->
-            <circle cx="18" cy="9" r="2.5" fill="#a78bfa"/>
-            <circle cx="11" cy="24" r="2.5" fill="#a78bfa"/>
-            <circle cx="25" cy="24" r="2.5" fill="#a78bfa"/>
-            <path d="M18 11.5V16M18 16l-7 6M18 16l7 6" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- label badge -->
-            <rect x="22" y="6" width="11" height="6" rx="3" fill="#a78bfa" fill-opacity="0.25"/>
-            <text x="27.5" y="10.6" text-anchor="middle" font-size="4.2" fill="#a78bfa" font-family="sans-serif" font-weight="700">DQ</text>
-          </svg>
+        <!-- Glow overlay -->
+        <div class="card-glow glow-purple"></div>
+
+        <div class="card-top">
+          <div class="card-icon-wrap icon-purple">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+              <circle cx="17" cy="8" r="3" fill="#a78bfa" />
+              <circle cx="9" cy="26" r="3" fill="#a78bfa" />
+              <circle cx="25" cy="26" r="3" fill="#a78bfa" />
+              <path d="M17 11v8M17 19l-8 5M17 19l8 5" stroke="#a78bfa" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <rect x="21" y="4" width="11" height="7" rx="3.5" fill="#a78bfa" fill-opacity="0.22" />
+              <text x="26.5" y="9.3" text-anchor="middle" font-size="4.5" fill="#a78bfa" font-family="sans-serif"
+                font-weight="700">DQ</text>
+            </svg>
+          </div>
+          <span class="card-arrow">→</span>
         </div>
+
         <h2 class="card-title">Decision &amp; Quiz</h2>
         <p class="card-desc">
-          Questions with auto-extracted <strong>Title</strong> &amp; <strong>Explanation</strong>.<br>
-          13-column Excel output.
+          Includes <strong>Decision Game · GK · Grammar · AI</strong> modules.<br>
+          Auto-extracts Title &amp; Explanation — 13-column Excel output.
         </p>
+
+        <div class="module-chips">
+          <span class="chip chip-purple">Decision Game</span>
+          <span class="chip chip-purple">GK</span>
+          <span class="chip chip-purple">Grammar</span>
+          <span class="chip chip-purple">AI</span>
+        </div>
+
         <div class="card-pills">
           <span class="pill pill-purple">POST /convert/dq</span>
           <span class="pill pill-purple">POST /parse/dq</span>
           <span class="pill pill-purple">GET /export/dq</span>
         </div>
-        <span class="card-arrow">→</span>
       </button>
 
-    </div><!-- /cards-grid -->
+      <!-- ── Card 2: Other (MCQ) ── -->
+      <button class="mode-card card-mcq" (click)="selectMode.emit('mcq')" id="btn-mode-mcq">
+        <div class="card-glow glow-blue"></div>
 
-    <!-- Footer note -->
+        <div class="card-top">
+          <div class="card-icon-wrap icon-blue">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+              <circle cx="17" cy="17" r="15" fill="#3b82f6" fill-opacity="0.12" />
+              <path d="M8 11h18M8 17h12M8 23h14" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" />
+              <circle cx="28" cy="11" r="3.5" fill="#60a5fa" />
+              <path d="M26.8 10.5l1.2 1.2 2-2" stroke="#1e3a5f" stroke-width="1.3" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="card-arrow">→</span>
+        </div>
+
+        <h2 class="card-title">Other (MCQ)</h2>
+        <p class="card-desc">
+          Includes <strong>IMO · NSO · IGKO · NEET · JEE · UPSC</strong> and more.<br>
+          Standard multiple-choice — 11-column Excel output.
+        </p>
+
+        <div class="module-chips">
+          <span class="chip chip-blue">IMO</span>
+          <span class="chip chip-blue">NSO</span>
+          <span class="chip chip-blue">NEET</span>
+          <span class="chip chip-blue">JEE</span>
+          <span class="chip chip-blue">UPSC</span>
+        </div>
+
+        <div class="card-pills">
+          <span class="pill pill-blue">POST /convert</span>
+          <span class="pill pill-blue">POST /parse</span>
+          <span class="pill pill-blue">GET /export</span>
+        </div>
+      </button>
+
+    </div>
+
+    <!-- Footer -->
     <p class="home-footer">
       <span class="dot dot-yellow"></span>
       Stateless · No data stored on server
     </p>
 
-  </div><!-- /home-content -->
-
+  </div>
 </div>
 
-<!-- ── Scoped styles ── -->
 <style>
-.home-wrapper {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f7fa;
-  position: relative;
-  overflow: hidden;
-  padding: 24px 16px;
-}
+  /* ── Wrapper ── */
+  .home-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f7fa;
+    position: relative;
+    overflow: hidden;
+    padding: 32px 16px;
+  }
 
-/* Animated blobs */
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.18;
-  animation: blobDrift 12s ease-in-out infinite alternate;
-}
-.blob-blue {
-  width: 480px; height: 480px;
-  background: #3b82f6;
-  top: -120px; left: -100px;
-}
-.blob-purple {
-  width: 400px; height: 400px;
-  background: #8b5cf6;
-  bottom: -100px; right: -80px;
-  animation-delay: -6s;
-}
-@keyframes blobDrift {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(30px, 20px) scale(1.06); }
-}
+  /* Blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+    animation: blobDrift 12s ease-in-out infinite alternate;
+  }
 
-/* Content container */
-.home-content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  width: 100%;
-  max-width: 860px;
-}
+  .blob-blue {
+    width: 480px;
+    height: 480px;
+    background: #3b82f6;
+    top: -120px;
+    left: -100px;
+  }
 
-/* Header */
-.home-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-}
-.home-logo {
-  width: 60px; height: 60px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.04);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 16px;
-  margin-bottom: 4px;
-}
-.home-title {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.5px;
-  margin: 0;
-}
-.home-sub {
-  font-size: 0.95rem;
-  color: #64748b;
-  margin: 0;
-}
+  .blob-purple {
+    width: 400px;
+    height: 400px;
+    background: #8b5cf6;
+    bottom: -100px;
+    right: -80px;
+    animation-delay: -6s;
+  }
 
-/* Cards grid */
-.cards-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  width: 100%;
-}
-@media (max-width: 600px) {
-  .cards-grid { grid-template-columns: 1fr; }
-}
+  @keyframes blobDrift {
+    from {
+      transform: translate(0, 0) scale(1);
+    }
 
-/* Individual card */
-.mode-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 28px 24px 24px;
-  cursor: pointer;
-  text-align: left;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
-  overflow: hidden;
-}
-.mode-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  opacity: 0;
-  transition: opacity 0.22s ease;
-}
-.card-mcq::before  { background: radial-gradient(ellipse at top left, rgba(59,130,246,0.12), transparent 60%); }
-.card-dq::before   { background: radial-gradient(ellipse at top left, rgba(139,92,246,0.12), transparent 60%); }
+    to {
+      transform: translate(30px, 20px) scale(1.06);
+    }
+  }
 
-.mode-card:hover {
-  transform: translateY(-4px);
-  background: #f8faff;
-}
-.card-mcq:hover { border-color: rgba(59,130,246,0.5); box-shadow: 0 12px 32px rgba(59,130,246,0.14); }
-.card-dq:hover  { border-color: rgba(139,92,246,0.5); box-shadow: 0 12px 32px rgba(139,92,246,0.14); }
-.mode-card:hover::before { opacity: 1; }
+  /* Content */
+  .home-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    width: 100%;
+    max-width: 860px;
+  }
 
-/* Icon wrap */
-.card-icon-wrap {
-  display: flex; align-items: center; justify-content: center;
-  width: 56px; height: 56px;
-  border-radius: 14px;
-}
-.icon-blue   { background: rgba(59,130,246,0.12);  border: 1px solid rgba(59,130,246,0.2); }
-.icon-purple { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2); }
+  /* Header */
+  .home-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
 
-/* Card text */
-.card-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0;
-}
-.card-desc {
-  font-size: 0.875rem;
-  color: #475569;
-  margin: 0;
-  line-height: 1.55;
-}
-.card-desc strong { color: #1e293b; }
+  .home-logo {
+    width: 62px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    margin-bottom: 4px;
+  }
 
-/* Pills */
-.card-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.pill {
-  font-size: 0.68rem;
-  font-family: 'Courier New', monospace;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-  letter-spacing: 0.3px;
-}
-.pill-blue   { background: rgba(59,130,246,0.10);  color: #1d4ed8; border: 1px solid rgba(59,130,246,0.25); }
-.pill-purple { background: rgba(139,92,246,0.10); color: #6d28d9; border: 1px solid rgba(139,92,246,0.25); }
+  .home-title {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
 
-/* Arrow */
-.card-arrow {
-  position: absolute;
-  top: 24px; right: 22px;
-  font-size: 1.2rem;
-  color: #cbd5e1;
-  transition: color 0.2s, transform 0.2s;
-}
-.mode-card:hover .card-arrow {
-  transform: translateX(4px);
-}
-.card-mcq:hover  .card-arrow { color: #60a5fa; }
-.card-dq:hover   .card-arrow { color: #a78bfa; }
+  .home-sub {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+  }
 
-/* Footer */
-.home-footer {
-  font-size: 0.78rem;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0;
-}
-.dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  display: inline-block;
-}
-.dot-yellow { background: #eab308; }
+  /* Grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Card */
+  .mode-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 26px 24px 22px;
+    cursor: pointer;
+    text-align: left;
+    overflow: hidden;
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+  }
+
+  .mode-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-dq:hover {
+    border-color: rgba(139, 92, 246, 0.55);
+    box-shadow: 0 16px 40px rgba(139, 92, 246, 0.16);
+  }
+
+  .card-mcq:hover {
+    border-color: rgba(59, 130, 246, 0.55);
+    box-shadow: 0 16px 40px rgba(59, 130, 246, 0.14);
+  }
+
+  /* Glow */
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.24s ease;
+    pointer-events: none;
+  }
+
+  .glow-purple {
+    background: radial-gradient(ellipse at top left, rgba(139, 92, 246, 0.13), transparent 65%);
+  }
+
+  .glow-blue {
+    background: radial-gradient(ellipse at top left, rgba(59, 130, 246, 0.13), transparent 65%);
+  }
+
+  .mode-card:hover .card-glow {
+    opacity: 1;
+  }
+
+  /* Card top row */
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Icon */
+  .card-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+  }
+
+  .icon-purple {
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.22);
+  }
+
+  .icon-blue {
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.22);
+  }
+
+  /* Arrow */
+  .card-arrow {
+    font-size: 1.2rem;
+    color: #d1d5db;
+    transition: color 0.2s, transform 0.2s;
+    margin-top: 4px;
+  }
+
+  .card-dq:hover .card-arrow {
+    color: #a78bfa;
+    transform: translateX(4px);
+  }
+
+  .card-mcq:hover .card-arrow {
+    color: #60a5fa;
+    transform: translateX(4px);
+  }
+
+  /* Text */
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .card-desc {
+    font-size: 0.86rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .card-desc strong {
+    color: #1e293b;
+  }
+
+  /* Module chips */
+  .module-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    letter-spacing: 0.2px;
+  }
+
+  .chip-purple {
+    background: rgba(139, 92, 246, 0.1);
+    color: #6d28d9;
+    border: 1px solid rgba(139, 92, 246, 0.28);
+  }
+
+  .chip-blue {
+    background: rgba(59, 130, 246, 0.1);
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.28);
+  }
+
+  /* API pills */
+  .card-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pill {
+    font-size: 0.63rem;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
+  }
+
+  .pill-purple {
+    background: rgba(139, 92, 246, 0.08);
+    color: #6d28d9;
+    border: 1px solid rgba(139, 92, 246, 0.22);
+  }
+
+  .pill-blue {
+    background: rgba(59, 130, 246, 0.08);
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.22);
+  }
+
+  /* Footer */
+  .home-footer {
+    font-size: 0.78rem;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot-yellow {
+    background: #eab308;
+  }
 </style>

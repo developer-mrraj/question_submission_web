@@ -19,6 +19,7 @@ export class AppComponent {
   /** Home → mode selection; 'home' shows the landing page */
   mode: 'home' | Mode = 'home';
 
+
   /** Current step in the wizard (shared across both flows) */
   currentStep: 1 | 2 | 3 = 1;
 
